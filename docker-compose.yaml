@@ -1,0 +1,56 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:11.14-bullseye
+    container_name: "db"
+    restart: 'no'
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/data/postgres
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - PGDATA=/data/postgres
+    networks:
+      - hakaton
+
+  backend:
+    container_name: "backend"
+    build:
+      context: .
+      dockerfile: ./backend/Dockerfile
+    restart: "no"
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/backend
+    environment:
+      - POSTGRES_NAME=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    depends_on:
+      - db
+    networks:
+      - hakaton
+
+  frontend:
+    container_name: "frontend"
+    build:
+      context: .
+      dockerfile: ./frontend/Dockerfile
+    restart: "no"
+    ports:
+      - "8080:8080"
+    networks:
+      - hakaton
+
+
+volumes:
+  postgres-data: null
+
+networks:
+  hakaton:
+    driver: bridge
