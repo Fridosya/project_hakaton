@@ -34,7 +34,7 @@
       Введённые пароли не совпадают
     </p>
 
-    <button variant="primary" type="submit" :disabled="formValid">Регистрация</button>
+    <button class="primary" type="submit" :disabled="formValid">Регистрация</button>
 
     <p class="mt-2">
       <small class="text-muted">
@@ -42,10 +42,8 @@
       </small>
     </p>
 
-    <p class="mt-3">Уже есть аккаунт? <router-link to="/auth/signin">Вход</router-link>
-    </p>
+    <p class="mt-3">Уже есть аккаунт? <router-link to="/auth/signin">Вход</router-link></p>
   </form>
-
 </template>
 
 <script>
