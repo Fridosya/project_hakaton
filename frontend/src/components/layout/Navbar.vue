@@ -11,9 +11,9 @@
                 <div class="navbar-item">
                     <div class="buttons">
                         <template v-if="!$store.state.isAuthenticated">
-                            <router-link to="/sign-up" class="button is-info"><strong>Зарегистрироваться</strong>
+                            <router-link to="/signup" class="button is-info"><strong>Зарегистрироваться</strong>
                             </router-link>
-                            <router-link to="/log-in" class="button is-light">Войти</router-link>
+                            <router-link to="/login" class="button is-light">Войти</router-link>
                         </template>
 
                         <template v-else>

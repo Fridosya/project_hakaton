@@ -12,8 +12,4 @@ COPY $SOURCE_DIR $DIST_DIR
 
 RUN pip install -r requirements.txt
 
-<<<<<<< HEAD
-CMD ["/bin/bash", "-c", "python manage.py migrate;python manage.py runserver 0:8000"]
-=======
-CMD ["./docker-entrypoint.sh"]
->>>>>>> c06bbdb (Базовая структура + докер)
+# CMD ["/bin/bash", "-c", "python manage.py migrate;python manage.py runserver 0:8000"]
