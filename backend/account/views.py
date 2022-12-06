@@ -1,4 +1,5 @@
 from django.contrib.auth import login, logout
+from django.db import IntegrityError
 from rest_framework import permissions, status, views, generics
 from rest_framework.response import Response
 
@@ -26,7 +27,18 @@ class LoginApiView(views.APIView):
         if serializer.is_valid(raise_exception=True):
             login(request=request, user=serializer.validated_data["user"])
 
-        return Response({"success": True}, status=status.HTTP_200_OK)
+        return Response(
+            {
+                "success": True,
+                "csrftoken": "",
+                "session": {
+                    "id": request.session.session_key,
+                    'expiry_date': request.session.get_expiry_date(),
+                    'expiry_age': request.session.get_expiry_age(),
+                }
+            },
+            status=status.HTTP_200_OK
+        )
 
 
 class LogoutApiView(views.APIView):
@@ -48,6 +60,14 @@ class ContractorListCreateAPIView(generics.ListCreateAPIView):
     @method_permission_classes([permissions.IsAuthenticated])
     def get(self, request, *args, **kwargs):
         return super(ContractorListCreateAPIView, self).get(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        try:
+            response = super().post(request, *args, **kwargs)
+        except IntegrityError:
+            return Response({'email': "Пользователь с таким e-mail уже существует"}, status=status.HTTP_400_BAD_REQUEST)
+
+        return response
 
 
 class ContractorRetrieveUpdateDeleteAPIView(generics.RetrieveUpdateDestroyAPIView):

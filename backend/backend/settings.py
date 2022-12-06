@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-ipdbx#(ohrilrpjzc87e&q2%5qhc^lvcze+=5oqa22335s60)o
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = ['http://localhost', '127.0.0.1']
 
 
 # Application definition
@@ -47,10 +47,9 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    "corsheaders.middleware.CorsMiddleware",
-
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    "corsheaders.middleware.CorsMiddleware",
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -157,4 +156,5 @@ REST_FRAMEWORK = {
 
 
 CORS_ORIGIN_ALLOW_ALL = False
-CORS_ORIGIN_WHITELIST = ["http://localhost:8080"]
+CORS_ALLOWED_ORIGINS = ["http://localhost", 'http://127.0.0.1']
+CORS_ALLOW_CREDENTIALS=True

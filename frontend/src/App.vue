@@ -1,25 +1,55 @@
 <template>
-  <HelloWorld/>
+  <CHeader/>
+  <main>
+    <router-view></router-view>
+  </main>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import CHeader from '@/components/CHeader.vue'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    CHeader
   }
 }
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+  * {
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+  }
+
+  main {
+    background: #e2f0f2;
+    min-height: calc(100vh - 75px); /* минус высота шапки */
+    overflow: auto; /* против схлопывающихся отступов */
+  }
+
+  a {
+    text-decoration: none;
+    color: #467BE3;
+  }
+
+  input:not([type="checkbox"]) {
+    width: 100%;
+    display: block;
+    height: 40px;
+    background: #fff;
+    border: 1px solid #D5D9DD;
+    border-radius: 6px;
+    padding: 0 15px;
+  }
+
+  input:focus {
+    outline: none;
+  }
+
+  input:disabled {
+    background: #F0F4FD;
+  }
+
 </style>

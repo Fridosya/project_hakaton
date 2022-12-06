@@ -16,10 +16,10 @@ class LoginSerializer(serializers.Serializer):
             user = authenticate(request=self.context.get('request'),
                                 username=email, password=password)
             if not user:
-                msg = 'Access denied: wrong email or password.'
+                msg = 'Неправильный e-mail или пароль'
                 raise serializers.ValidationError(msg, code='authorization')
         else:
-            msg = 'Both "email" and "password" are required.'
+            msg = 'Необходимо ввести e-mail и пароль'
             raise serializers.ValidationError(msg, code='authorization')
 
         attrs["user"] = user
