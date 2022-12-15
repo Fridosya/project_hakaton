@@ -10,7 +10,10 @@ import BidView from '../views/dashboard/BidView.vue'
 const routes = [{
         path: '/',
         name: 'LogIn',
-        component: LogIn
+        component: LogIn,
+        meta: {
+            requireLogin: false
+        }
     },
     {
         path: '/login',
