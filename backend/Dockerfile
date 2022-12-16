@@ -12,4 +12,4 @@ COPY $SOURCE_DIR $DIST_DIR
 
 RUN pip install -r requirements.txt
 
-CMD ["/bin/bash", "-c", "python manage.py migrate;python manage.py runserver 0:8000"]
+CMD ["/bin/bash", "-c", "python manage.py migrate;python manage.py runserver_plus 0.0.0.0:8000 --cert-file ./certs/localhost.crt"]

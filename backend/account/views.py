@@ -1,4 +1,5 @@
 from django.contrib.auth import login, logout
+from django.contrib.auth.models import AnonymousUser
 from django.db import IntegrityError
 from rest_framework import permissions, status, views, generics
 from rest_framework.response import Response
@@ -25,17 +26,26 @@ class LoginApiView(views.APIView):
         serializer = LoginSerializer(data=request.data)
 
         if serializer.is_valid(raise_exception=True):
-            login(request=request, user=serializer.validated_data["user"])
+            user = serializer.validated_data["user"]
+            login(request=request, user=user)
+
+        user_serializer = UserSerializer(instance=user)
+
+        account_serializer = None
+
+        if user.is_contractor:
+            account = ContractorAccount.objects.get(user__id=user.id)
+            account_serializer = ContractorAccountSerializer(instance=account)
+
+        if user.is_customer:
+            account = CustomerAccount.objects.get(user__id=user.id)
+            account_serializer = CustomerAccountSerializer(instance=account)
 
         return Response(
             {
                 "success": True,
-                "csrftoken": "",
-                "session": {
-                    "id": request.session.session_key,
-                    'expiry_date': request.session.get_expiry_date(),
-                    'expiry_age': request.session.get_expiry_age(),
-                }
+                "user": user_serializer.data,
+                "account": None if not account_serializer else account_serializer.data,
             },
             status=status.HTTP_200_OK
         )
@@ -88,3 +98,31 @@ class CustomerListCreateAPIView(generics.ListCreateAPIView):
 class CustomerRetrieveUpdateDeleteAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = CustomerAccount.objects.all()
     serializer_class = CustomerAccountSerializer
+
+
+class CurrentUserView(views.APIView):
+    permission_classes = [permissions.AllowAny]
+
+    def get(self, request):
+        account_serializer = None
+        user = request.user or None
+
+        user_serializer = UserSerializer(instance=user)
+
+        if not isinstance(user, AnonymousUser):
+            if user.is_contractor:
+                account = ContractorAccount.objects.get(user__id=user.id)
+                account_serializer = ContractorAccountSerializer(instance=account)
+
+            if user.is_customer:
+                account = CustomerAccount.objects.get(user__id=user.id)
+                account_serializer = CustomerAccountSerializer(instance=account)
+
+        return Response(
+            {
+                "success": True,
+                "user": user_serializer.data,
+                "account": None if not account_serializer else account_serializer.data,
+            },
+            status=status.HTTP_200_OK
+        ) 

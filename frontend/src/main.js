@@ -18,6 +18,8 @@ const sessionid = app.$cookies.get('sessionid')
 
 if (sessionid) {
     store.commit('mutateisAuthorized', true)
+    store.commit('mutateUser', JSON.parse(localStorage.getItem('user')))
+    store.commit('mutateAccount', JSON.parse(localStorage.getItem('account')))
 }
 
 app.mount('#app')
