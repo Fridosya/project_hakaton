@@ -27,6 +27,7 @@ services:
       - "8000:8000"
     volumes:
       - ./backend:/backend
+      - ./.certs:/backend/certs
     environment:
       - POSTGRES_NAME=postgres
       - POSTGRES_USER=postgres
@@ -41,12 +42,13 @@ services:
     container_name: "frontend"
     build:
       context: 'frontend/'
-      # dockerfile: ./frontend/Dockerfile
     restart: "no"
     ports:
-      - "80:80"
+      - "8080:8080"
     networks:
       - hakaton
+    volumes:
+      - ./.certs:/app/certs
 
 
 volumes:

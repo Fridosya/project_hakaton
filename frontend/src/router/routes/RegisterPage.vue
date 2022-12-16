@@ -194,10 +194,10 @@
                 }
 
                 axios.
-                    post('http://127.0.0.1:8000/contractors/', formData)
+                    post('https://localhost:8000/contractors/', formData)
                     .then(() => {
                         axios.
-                            post('http://127.0.0.1:8000/login/', {
+                            post('https://localhost:8000/login/', {
                                 'email': this.email,
                                 'password': this.password
                             }, { withCredentials: true })
@@ -207,7 +207,11 @@
                                     // потому что теперь межсайтово и без ssl не получится 
                                     // this.$cookies.set('sessionid', res.data.session.id, res.data.session.expiry_age)
 
-                                    this.$store.dispatch('login')
+                                    this.$store.commit('mutateisAuthorized', true)
+                                    this.$store.commit('mutateUser', res.data.user)
+                                    if (res.data.account) {
+                                        this.$store.commit('mutateAccount', res.data.account)
+                                    }
                                     this.$router.push({ name: 'home' })
                                 }
                             })
