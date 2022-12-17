@@ -116,6 +116,7 @@
 <style scoped>
     aside {
         width: 350px;
+        min-width: 350px;
         background: #FFFFFF;
         border-right: 1px solid #D2D1D1;
         min-height: calc(100vh - 75px);

@@ -331,7 +331,7 @@
         padding-right: 35px;
         padding-bottom: 40px;
         display: grid;
-        grid-template-columns: minmax(auto, 860px) 310px;
+        grid-template-columns:auto 310px;
         column-gap: 20px;
     }
 
