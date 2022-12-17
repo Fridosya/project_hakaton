@@ -1,11 +1,15 @@
 <template>
-    <button>
+    <button :class="{_danger: danger}">
         <slot></slot>
     </button>
 </template>
 
 <script>
-
+    export default {
+        props: {
+            danger: Boolean
+        }
+    }
 </script>
 
 <style scoped>
@@ -29,5 +33,15 @@
     button:hover {
         background: #1d70a7;
         box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
+    }
+
+    ._danger {
+        color: #F5222D;
+        background: #FFEFF0;
+    }
+
+    ._danger:hover {
+        background: #F5222D;
+        color: #FFEFF0;
     }
 </style>

@@ -1,7 +1,17 @@
 import { createStore } from 'vuex'
+import axios from 'axios'
 
 
 const store = createStore({
+    actions: {
+        fetchApps({commit}) {
+            axios.
+                get('https://localhost:8000/project_apps/', {withCredentials: true})
+                .then(res => {
+                    commit('setApps', res.data)
+                })
+        }
+    },
     mutations: {
         mutateisAuthorized(state, isAuthorized) {
             state.isAuthorized = isAuthorized
@@ -11,10 +21,15 @@ const store = createStore({
         },
         mutateAccount(state, account) {
             state.account = account
+        },
+        setApps(state, apps) {
+            state.apps = apps
         }
     },
     state() {
         return {
+            apps: [],
+
             isAuthorized: false,
             user: false,
             account: false
@@ -55,6 +70,9 @@ const store = createStore({
         },
         currentAccount(state) {
             return state.account
+        },
+        apps(state) {
+            return state.apps
         }
     }
 })
