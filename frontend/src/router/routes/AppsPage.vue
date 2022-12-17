@@ -18,7 +18,7 @@
                                         stroke-linecap="round" />
                                 </svg>
                             </button>
-                            <input type="text" class="search-input" placeholder="Поиск по заявкам">
+                            <input type="text" class="search-input" placeholder="Поиск по заявкам" v-model="search">
                         </div>
                         <p class="apps-count">Всего заявок: {{ apps.length }}</p>
                     </div>
@@ -146,6 +146,7 @@
             CCheckbox
         },
         data: () => ({
+            search: '',
             statusFilters: [
                 {
                     type: 'Все заявки',
@@ -243,6 +244,14 @@
                     apps = apps.filter(app => activeTypes.includes(app.work_type))
                 }
 
+                // search
+
+                if (this.search.length) {
+                    apps = apps.filter(app => {
+                        return app.title.toLowerCase().includes(this.search.toLowerCase()) || app.description.toLowerCase().includes(this.search.toLowerCase())
+                    })
+                }
+
                 return apps
             },
             resetFiltersShow() {
@@ -280,8 +289,8 @@
                     return filter
                 })
 
-                this.typeFilters = this.typeFilters.map(filter => { 
-                    filter.active = false; return filter 
+                this.typeFilters = this.typeFilters.map(filter => {
+                    filter.active = false; return filter
                 })
 
                 this.dateTo = ref()
