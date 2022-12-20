@@ -26,10 +26,9 @@
                     <div class="apps-list">
                         <template v-if="apps.length">
                             <AppListItem v-for="app in apps" :key="app.id" :title="app.title"
-                                :description="app.description" :work_type="app.work_type_display"
-                                :deadline_from="app.deadline_from" :deadline_to="app.deadline_to"
-                                :status="app.status_display"
-                                :id="app.id">
+                                @deleteApp="deleteApp(app.id)" :description="app.description"
+                                :work_type="app.work_type_display" :deadline_from="app.deadline_from"
+                                :deadline_to="app.deadline_to" :status="app.status" :status_display="app.status_display" :id="app.id">
                             </AppListItem>
                         </template>
 
@@ -227,9 +226,10 @@
         }),
         computed: {
             apps() {
-                const activeStatusFilter = this.statusFilters.find(filter => filter.active)
+                let apps = this.$store.getters.apps
 
-                let apps = this.$store.getters.apps.filter(activeStatusFilter.filter)
+                const activeStatusFilter = this.statusFilters.find(filter => filter.active)
+                apps = apps.filter(activeStatusFilter.filter)
 
                 if (this.dateFrom) {
                     apps = apps.filter(app => Date.parse(app.deadline_from.split('.').reverse().join('/')) >= this.dateFrom)
@@ -299,6 +299,18 @@
 
                 this.dateFilterShow = false
                 this.typeFilterShow = false
+            },
+            deleteApp(id) {
+                this.$http
+                    .delete(`https://localhost:8000/project_app/${id}`, { headers: { "X-Csrftoken": this.$cookies.get('csrftoken') } })
+                    .then(res => {
+                        if (res.status == 204) {
+                            this.$store.commit('deleteApp', id)
+                        }
+                    })
+                    .catch(err => {
+                        console.log(err)
+                    })
             }
         },
         setup() {
@@ -332,7 +344,7 @@
         padding-right: 35px;
         padding-bottom: 40px;
         display: grid;
-        grid-template-columns:auto 310px;
+        grid-template-columns: auto 310px;
         column-gap: 20px;
     }
 

@@ -25,7 +25,7 @@ const store = createStore({
             state.apps = apps
         },
         deleteApp(state, id) {
-            state.apps.splice(state.apps.find(app => app.id == id), 1)
+            state.apps.splice(state.apps.findIndex(app => app.id == id), 1)
         }
     },
     state() {

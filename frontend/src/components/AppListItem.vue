@@ -2,7 +2,7 @@
     <div class="app">
         <div class="app-header">
             <h3 class="app-title">{{ title }}</h3>
-            <div class="app-status" :class="{_project: status == 'Проект заявки', _collection: status == 'Осуществляется набор', _appointed: status == 'Исполнитель назначен'}">{{ status }}</div>
+            <div class="app-status" :class="{_project: status_display == 'Проект заявки', _collection: status_display == 'Осуществляется набор', _appointed: status_display == 'Исполнитель назначен'}">{{ status_display }}</div>
         </div>
 
         <div class="app-body">
@@ -22,6 +22,15 @@
 
         <div class="app-footer">
             <CButton @click="this.$router.push({ name: 'application', params: { id: id } })" class="app-button">Просмотр заявки</CButton>
+
+            <template v-if="status == 'SELECTION_PROCESS'">
+                <CButton blue>Редактировать</CButton>
+            </template>
+            <template v-if="status == 'DRAFT'">
+                <CButton>Опубликовать</CButton>
+                <CButton blue>Продолжить заполнение</CButton>
+                <CButton danger @click="$emit('deleteApp')">Удалить</CButton>
+            </template>
         </div>
     </div>
 </template>
@@ -33,7 +42,7 @@
         components: {
             CButton
         },
-        props: ['title', 'description', 'work_type', 'deadline_from', 'deadline_to', 'status']
+        props: ['id', 'title', 'description', 'work_type', 'deadline_from', 'deadline_to', 'status', 'status_display']
     }
 </script>
 
@@ -125,6 +134,16 @@
     .app-footer {
         padding: 20px 40px;
         display: flex;
+    }
+
+    .app-footer button {
+        min-width: 165px;
+        padding: 0 15px;
+        white-space: nowrap;
+    }
+
+    .app-footer button:not(:last-child) {
+        margin-right: 15px;
     }
 
     .app-button {
