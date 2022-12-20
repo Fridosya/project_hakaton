@@ -28,7 +28,8 @@
                             <AppListItem v-for="app in apps" :key="app.id" :title="app.title"
                                 :description="app.description" :work_type="app.work_type_display"
                                 :deadline_from="app.deadline_from" :deadline_to="app.deadline_to"
-                                :status="app.status_display">
+                                :status="app.status_display"
+                                :id="app.id">
                             </AppListItem>
                         </template>
 
@@ -310,7 +311,7 @@
             }
         },
         created() {
-            this.$store.dispatch('fetchApps')
+            this.$store.dispatch('fetchApps', this.$http)
         }
     }
 </script>

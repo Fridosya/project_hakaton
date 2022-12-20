@@ -21,7 +21,7 @@
         </div>
 
         <div class="app-footer">
-            <CButton class="app-button">Просмотр заявки</CButton>
+            <CButton @click="this.$router.push({ name: 'application', params: { id: id } })" class="app-button">Просмотр заявки</CButton>
         </div>
     </div>
 </template>

@@ -30,7 +30,7 @@
     import CButton from '@/components/CButton.vue'
     import CCheckbox from '@/components/CCheckbox.vue'
 
-    import axios from 'axios'
+    // import axios from 'axios'
 
     import { useVuelidate } from '@vuelidate/core'
     import { required, helpers, email } from '@vuelidate/validators'
@@ -64,11 +64,11 @@
 
                 if (!isFormCorrect) return
 
-                axios.
+                this.$http.
                     post('https://localhost:8000/login/', {
                         'email': this.email,
                         'password': this.password
-                    }, { withCredentials: true })
+                    })
                     .then(res => {
                         if (res.data.success) {
                             // костыль: передаю и устанавливаю куки вручную, 

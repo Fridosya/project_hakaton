@@ -18,6 +18,7 @@ def test_data(apps, schema_editor):
         description='Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim.',
         budget_from=1000,
         budget_to=500_000,
+        tasks=['Задача 1', 'Задача 2'],
         owner=User.objects.get(pk=3)
     )
     ProjectApplication.objects.create(

@@ -1,5 +1,5 @@
 <template>
-    <button :class="{_danger: danger}">
+    <button :class="{_danger: danger, _blue: blue}">
         <slot></slot>
     </button>
 </template>
@@ -7,7 +7,8 @@
 <script>
     export default {
         props: {
-            danger: Boolean
+            danger: Boolean,
+            blue: Boolean,
         }
     }
 </script>
@@ -43,5 +44,15 @@
     ._danger:hover {
         background: #F5222D;
         color: #FFEFF0;
+    }
+
+    ._blue {
+        color: #1f78b4;
+        background: rgba(31, 120, 180, 0.24);
+    }
+
+    ._blue:hover  {
+        color: #0a67a5;
+        background: rgba(7, 137, 224, 0.24);
     }
 </style>
