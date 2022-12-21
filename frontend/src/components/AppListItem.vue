@@ -24,11 +24,11 @@
             <CButton @click="this.$router.push({ name: 'application', params: { id: id } })" class="app-button">Просмотр заявки</CButton>
 
             <template v-if="status == 'SELECTION_PROCESS'">
-                <CButton blue>Редактировать</CButton>
+                <CButton blue @click="$router.push({ name: 'applicationEdit', params: {id: id} })">Редактировать</CButton>
             </template>
             <template v-if="status == 'DRAFT'">
                 <CButton @click="publish">Опубликовать</CButton>
-                <CButton blue>Продолжить заполнение</CButton>
+                <CButton blue @click="$router.push({ name: 'applicationEdit', params: {id: id} })">Продолжить заполнение</CButton>
                 <CButton danger @click="$emit('deleteApp')">Удалить</CButton>
             </template>
         </div>

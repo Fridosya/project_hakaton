@@ -45,11 +45,11 @@
                     </div>
                     <div class="app-buttons" v-if="!['FINISHED', 'PERFORMER_APPOINTED'].includes(app.status)">
                         <template v-if="app.status == 'SELECTION_PROCESS'">
-                            <CButton>Редактировать</CButton>
+                            <CButton @click="$router.push({ name: 'applicationEdit', params: {id: app.id} })">Редактировать</CButton>
                         </template>
                         <template v-if="app.status == 'DRAFT'">
                             <CButton @click="publish">Опубликовать</CButton>
-                            <CButton blue>Продолжить заполнение</CButton>
+                            <CButton blue @click="$router.push({ name: 'applicationEdit', params: {id: app.id} })">Продолжить заполнение</CButton>
                             <CButton danger @click="deleteApp">Удалить</CButton>
                         </template>
                     </div>

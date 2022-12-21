@@ -16,7 +16,8 @@ const routes = [
     { path: '/registration', component: RegisterPage, name: 'register' },
     { path: '/applications', component: AppListPage, name: 'applications' },
     { path: '/application/:id', component: AppPage, name: 'application'},
-    { path: '/application/create', component: AppCreate, name: 'applicationCreate' }
+    { path: '/application/create', component: AppCreate, name: 'applicationCreate' },
+    { path: '/application/:id/edit', component: AppCreate, name: 'applicationEdit', meta: { edit: true } },
 ]
 
 const router = createRouter({

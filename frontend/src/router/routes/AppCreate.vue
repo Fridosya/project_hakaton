@@ -3,7 +3,7 @@
         <AsideMenu></AsideMenu>
         <div class="page">
             <div class="app-create-wrapper">
-                <h1 class="title">Создание заявки</h1>
+                <h1 class="title">{{ applicationEdit ? 'Редактирование заявки' : 'Создание заявки' }}</h1>
 
                 <a href="#" @click.prevent="$router.push({ name: 'applications' })" class="back">
                     <div class="back-arrow">
@@ -93,9 +93,21 @@
                 </form>
 
                 <div class="app-create-buttons">
-                    <CButton @click="publish">Опубликовать заявку</CButton>
-                    <CButton blue @click="save">Сохранить</CButton>
-                    <button class="save-pdf">Сохранить в PDF</button>
+                    <template v-if="!applicationEdit">
+                        <CButton @click="publish">Опубликовать заявку</CButton>
+                        <CButton blue @click="save">Сохранить</CButton>
+                        <button class="save-pdf">Сохранить в PDF</button>
+                    </template>
+                    <template v-else>
+                        <template v-if="editingApp && editingApp.status == 'DRAFT'">
+                            <CButton blue @click="save(true)">Сохранить изменения</CButton>
+                            <button class="save-pdf">Сохранить в PDF</button>
+                            <CButton danger @click="deleteApp">Удалить</CButton>
+                        </template>
+                        <template v-else>
+                            <CButton @click="save(true)">Опубликовать изменения</CButton>
+                        </template>
+                    </template>
                 </div>
             </div>
         </div>
@@ -124,6 +136,8 @@
             budget_to: null,
             description: null,
             tasks: null,
+            dateFrom: ref(),
+            dateTo: ref(),
 
             workTypeItems: [
                 {
@@ -171,7 +185,10 @@
             vuelidateExternalResults: {
                 dates: [],
                 budget: []
-            }
+            },
+
+            applicationEdit: false,
+            editingApp: null,
         }),
         computed: {
             formattedTasks() {
@@ -218,7 +235,7 @@
                     )
                 }
             },
-            async save() {
+            async save(patch = false) {
                 this.validate()
                 const isFormValid = await this.v$.$validate()
 
@@ -228,26 +245,44 @@
                 const dateTo = this.dateTo.toLocaleDateString().split('.').reverse().join('-')
                 const workType = this.workTypeItems.find(item => item.active == true).type
 
-                this.$http
-                    .post('https://localhost:8000/project_apps/',
-                        {
-                            title: this.title,
-                            work_type: workType,
-                            deadline_from: dateFrom,
-                            deadline_to: dateTo,
-                            budget_from: this.budget_from,
-                            budget_to: this.budget_to,
-                            description: this.description,
-                            tasks: JSON.stringify(this.formattedTasks),
-                            status: 'DRAFT'
-                        },
-                        { headers: { "X-Csrftoken": this.$cookies.get('csrftoken') } }
-                    )
-                    .then(res => {
-                        if (res.status == 201) {
-                            this.$router.push({ name: 'application', params: { id: res.data.id } })
-                        }
-                    })
+                let postData = {
+                    title: this.title,
+                    work_type: workType,
+                    deadline_from: dateFrom,
+                    deadline_to: dateTo,
+                    budget_from: this.budget_from,
+                    budget_to: this.budget_to,
+                    description: this.description,
+                    tasks: JSON.stringify(this.formattedTasks),
+                }
+
+                if (!patch) {
+                    postData.status = 'DRAFT'
+                }
+
+                if (patch) {
+                    this.$http
+                        .patch(`https://localhost:8000/project_app/${this.editingApp.id}/`,
+                            postData,
+                            { headers: { "X-Csrftoken": this.$cookies.get('csrftoken') } }
+                        )
+                        .then(res => {
+                            if (res.status == 200) {
+                                this.$router.push({ name: 'application', params: { id: res.data.id } })
+                            }
+                        })
+                } else {
+                    this.$http
+                        .post('https://localhost:8000/project_apps/',
+                            postData,
+                            { headers: { "X-Csrftoken": this.$cookies.get('csrftoken') } }
+                        )
+                        .then(res => {
+                            if (res.status == 201) {
+                                this.$router.push({ name: 'application', params: { id: res.data.id } })
+                            }
+                        })
+                }
             },
             async publish() {
                 this.validate()
@@ -279,15 +314,53 @@
                             this.$router.push({ name: 'application', params: { id: res.data.id } })
                         }
                     })
-            }
+            },
+            fetchAppToEdit(id) {
+                this.$http
+                    .get(`https://localhost:8000/project_app/${id}/`)
+                    .then(res => {
+                        this.title = res.data.title
+                        this.budget_from = res.data.budget_from
+                        this.budget_to = res.data.budget_to
+                        this.description = res.data.description
+
+                        if (typeof res.data.tasks == 'string') {
+                            this.tasks = JSON.parse(res.data.tasks).map(task => '\u2022 ' + task).join('\n')
+                        } else {
+                            this.tasks = res.data.tasks.map(task => '\u2022 ' + task).join('\n')
+                        }
+
+                        this.dateFrom = ref(new Date())
+                        this.dateFrom.setDate(res.data.deadline_from.split('.')[0])
+                        this.dateFrom.setMonth(res.data.deadline_from.split('.')[1])
+                        this.dateFrom.setFullYear(res.data.deadline_from.split('.')[2])
+
+                        this.dateTo = ref(new Date())
+                        this.dateTo.setDate(res.data.deadline_to.split('.')[0])
+                        this.dateTo.setMonth(res.data.deadline_to.split('.')[1])
+                        this.dateTo.setFullYear(res.data.deadline_to.split('.')[2])
+
+                        this.workTypeItems = this.workTypeItems.map(item => {
+                            item.active = item.type == res.data.work_type ? true : false
+                            return item
+                        })
+
+                        this.editingApp = res.data
+                    })
+            },
+            deleteApp() {
+                this.$http
+                    .delete(`https://localhost:8000/project_app/${this.editingApp.id}`, { headers: { "X-Csrftoken": this.$cookies.get('csrftoken') } })
+                    .then(res => {
+                        if (res.status == 204) {
+                            this.$store.commit('deleteApp', this.editingApp.id)
+                            this.$router.push({ name: 'applications' })
+                        }
+                    })
+            },
         },
         setup() {
-            const dateFrom = ref();
-            const dateTo = ref();
-
             return {
-                dateFrom,
-                dateTo,
                 v$: useVuelidate()
             }
         },
@@ -314,9 +387,24 @@
                 }
             }
         },
-        // mounted() {
-        //     console.log(this.v$)
-        // }
+        created() {
+            if (this.$route.meta.edit) {
+                this.applicationEdit = this.$route.meta.edit
+
+                this.fetchAppToEdit(this.$route.params.id)
+            }
+        }
+        // beforeRouteEnter(to) {
+        //     if (to.name == "applicationEdit") {
+        //         to.meta.edit = true
+        //     }
+        // },
+        // beforeRouteUpdate(to, from) {
+        //     // called when the route that renders this component has changed, but this component is reused in the new route.
+        //     // For example, given a route with params `/users/:id`, when we navigate between `/users/1` and `/users/2`,
+        //     // the same `UserDetails` component instance will be reused, and this hook will be called when that happens.
+        //     // Because the component is mounted while this happens, the navigation guard has access to `this` component instance.
+        // },
     }
 </script>
 
