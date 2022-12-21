@@ -50,6 +50,7 @@
         content: '';
         display: block;
         width: 16px;
+        min-width: 16px;
         height: 16px;
         border: 1px solid #D5D9DD;
         border-radius: 3px;

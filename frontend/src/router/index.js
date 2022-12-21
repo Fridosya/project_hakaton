@@ -5,14 +5,19 @@ import store from '@/store'
 import HomePage from './routes/HomePage.vue'
 import LoginPage from './routes/LoginPage.vue'
 import RegisterPage from './routes/RegisterPage.vue'
-import AppsPage from './routes/AppsPage.vue'
+import AppListPage from './routes/AppListPage.vue'
+import AppPage from './routes/AppPage.vue'
+import AppCreate from './routes/AppCreate.vue'
 
 
 const routes = [
     { path: '/', component: HomePage, name: 'home' },
     { path: '/login', component: LoginPage, name: 'login' },
     { path: '/registration', component: RegisterPage, name: 'register' },
-    { path: '/applications', component: AppsPage, name: 'applications' }
+    { path: '/applications', component: AppListPage, name: 'applications' },
+    { path: '/application/:id', component: AppPage, name: 'application'},
+    { path: '/application/create', component: AppCreate, name: 'applicationCreate' },
+    { path: '/application/:id/edit', component: AppCreate, name: 'applicationEdit', meta: { edit: true } },
 ]
 
 const router = createRouter({
@@ -22,10 +27,6 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
     const authorized = store.getters.isAuthorized
-
-    // if (authorized) {
-    //     store.dispatch('setUserAndAccount')
-    // }
 
     if (!['login', 'register'].includes(to.name) && !authorized) {
         next({ name: 'login' })
