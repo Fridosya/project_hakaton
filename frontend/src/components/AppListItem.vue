@@ -27,7 +27,7 @@
                 <CButton blue>Редактировать</CButton>
             </template>
             <template v-if="status == 'DRAFT'">
-                <CButton>Опубликовать</CButton>
+                <CButton @click="publish">Опубликовать</CButton>
                 <CButton blue>Продолжить заполнение</CButton>
                 <CButton danger @click="$emit('deleteApp')">Удалить</CButton>
             </template>
@@ -42,7 +42,25 @@
         components: {
             CButton
         },
-        props: ['id', 'title', 'description', 'work_type', 'deadline_from', 'deadline_to', 'status', 'status_display']
+        props: ['id', 'title', 'description', 'work_type', 'deadline_from', 'deadline_to', 'status', 'status_display'],
+        methods: {
+            publish() {
+                this.$http
+                    .patch(
+                        `https://localhost:8000/project_app/${this.id}/`,
+                        {
+                            status: 'SELECTION_PROCESS'
+                        },
+                        { headers: { "X-Csrftoken": this.$cookies.get('csrftoken') } }
+                    )
+                    .then(res => {
+                        if (res.status == 200) {
+                            this.$store.dispatch('fetchApps', this.$http)
+                        }
+                    })
+                    
+            }
+        }
     }
 </script>
 

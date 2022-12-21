@@ -227,6 +227,10 @@
         computed: {
             apps() {
                 let apps = this.$store.getters.apps
+                
+                apps.sort((app1, app2) => {
+                    return app1.created_at > app2.created_at ? 1 : -1
+                })
 
                 const activeStatusFilter = this.statusFilters.find(filter => filter.active)
                 apps = apps.filter(activeStatusFilter.filter)

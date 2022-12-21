@@ -48,7 +48,7 @@
                             <CButton>Редактировать</CButton>
                         </template>
                         <template v-if="app.status == 'DRAFT'">
-                            <CButton>Опубликовать</CButton>
+                            <CButton @click="publish">Опубликовать</CButton>
                             <CButton blue>Продолжить заполнение</CButton>
                             <CButton danger @click="deleteApp">Удалить</CButton>
                         </template>
@@ -64,7 +64,7 @@
     import AsideMenu from '@/components/AsideMenu.vue'
     import CButton from '@/components/CButton.vue'
 
-    
+
     export default {
         components: {
             AsideMenu,
@@ -84,7 +84,7 @@
                         this.app.tasks = JSON.parse(this.app.tasks)
                     })
                     .catch(err => {
-                        if (err.response.status == 404) {
+                        if (err.status == 404) {
                             this.notFound = true
                         }
                     })
@@ -98,9 +98,22 @@
                             this.$router.push({ name: 'applications' })
                         }
                     })
-                    .catch(err => {
-                        console.log(err)
+            },
+            publish() {
+                this.$http
+                    .patch(
+                        `https://localhost:8000/project_app/${this.app.id}/`,
+                        {
+                            status: 'SELECTION_PROCESS'
+                        },
+                        { headers: { "X-Csrftoken": this.$cookies.get('csrftoken') } }
+                    )
+                    .then(res => {
+                        if (res.status == 200) {
+                            this.app = res.data
+                        }
                     })
+                    
             }
         },
         created() {
