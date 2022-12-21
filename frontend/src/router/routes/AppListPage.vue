@@ -41,7 +41,7 @@
 
                 <div class="filters-column">
 
-                    <CButton class="btn-new-app">
+                    <CButton class="btn-new-app" @click="$router.push({ name: 'applicationCreate' })">
                         <div class="app-plus">
                             <svg width="12" height="14" viewBox="0 0 12 14" fill="none"
                                 xmlns="http://www.w3.org/2000/svg">

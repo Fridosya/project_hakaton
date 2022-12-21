@@ -34,7 +34,7 @@ export default {
     color: #467BE3;
   }
 
-  input:not([type="checkbox"]) {
+  input:not([type="checkbox"]), textarea {
     width: 100%;
     display: block;
     height: 40px;
@@ -44,11 +44,16 @@ export default {
     padding: 0 15px;
   }
 
-  input:focus {
+  textarea {
+    padding-top: 10px;
+    resize: none;
+  }
+
+  input:focus, textarea:focus {
     outline: none;
   }
 
-  input:disabled {
+  input:disabled, textarea:disabled {
     background: #F0F4FD;
   }
 

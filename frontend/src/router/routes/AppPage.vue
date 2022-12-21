@@ -81,6 +81,7 @@
                     .then(res => {
                         this.notFound = false
                         this.app = res.data
+                        this.app.tasks = JSON.parse(this.app.tasks)
                     })
                     .catch(err => {
                         if (err.response.status == 404) {
@@ -130,6 +131,7 @@
         font-weight: 500;
         font-size: 24px;
         line-height: 29px;
+        width: fit-content;
     }
 
     .back-arrow {

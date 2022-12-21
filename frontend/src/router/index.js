@@ -7,6 +7,7 @@ import LoginPage from './routes/LoginPage.vue'
 import RegisterPage from './routes/RegisterPage.vue'
 import AppListPage from './routes/AppListPage.vue'
 import AppPage from './routes/AppPage.vue'
+import AppCreate from './routes/AppCreate.vue'
 
 
 const routes = [
@@ -14,7 +15,8 @@ const routes = [
     { path: '/login', component: LoginPage, name: 'login' },
     { path: '/registration', component: RegisterPage, name: 'register' },
     { path: '/applications', component: AppListPage, name: 'applications' },
-    { path: '/applications/:id', component: AppPage, name: 'application'}
+    { path: '/application/:id', component: AppPage, name: 'application'},
+    { path: '/application/create', component: AppCreate, name: 'applicationCreate' }
 ]
 
 const router = createRouter({

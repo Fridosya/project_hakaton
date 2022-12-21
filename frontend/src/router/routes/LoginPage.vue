@@ -140,6 +140,7 @@
 
     .form__input--error {
         border: 1px solid #F5222D !important;
+        border-radius: 6px;
     }
 
     .form__input-error {
