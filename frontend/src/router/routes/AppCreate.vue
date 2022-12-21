@@ -95,7 +95,7 @@
                 <div class="app-create-buttons">
                     <template v-if="!applicationEdit">
                         <CButton @click="publish">Опубликовать заявку</CButton>
-                        <CButton blue @click="save">Сохранить</CButton>
+                        <CButton blue @click="save(false)">Сохранить</CButton>
                         <button class="save-pdf">Сохранить в PDF</button>
                     </template>
                     <template v-else>
@@ -235,7 +235,7 @@
                     )
                 }
             },
-            async save(patch = false) {
+            async save(toPatch = false) {
                 this.validate()
                 const isFormValid = await this.v$.$validate()
 
@@ -256,11 +256,11 @@
                     tasks: JSON.stringify(this.formattedTasks),
                 }
 
-                if (!patch) {
+                if (!toPatch) {
                     postData.status = 'DRAFT'
                 }
 
-                if (patch) {
+                if (toPatch) {
                     this.$http
                         .patch(`https://localhost:8000/project_app/${this.editingApp.id}/`,
                             postData,
