@@ -93,7 +93,7 @@
                 </form>
 
                 <div class="app-create-buttons">
-                    <CButton>Опубликовать заявку</CButton>
+                    <CButton @click="publish">Опубликовать заявку</CButton>
                     <CButton blue @click="save">Сохранить</CButton>
                     <button class="save-pdf">Сохранить в PDF</button>
                 </div>
@@ -240,6 +240,37 @@
                             description: this.description,
                             tasks: JSON.stringify(this.formattedTasks),
                             status: 'DRAFT'
+                        },
+                        { headers: { "X-Csrftoken": this.$cookies.get('csrftoken') } }
+                    )
+                    .then(res => {
+                        if (res.status == 201) {
+                            this.$router.push({ name: 'application', params: { id: res.data.id } })
+                        }
+                    })
+            },
+            async publish() {
+                this.validate()
+                const isFormValid = await this.v$.$validate()
+
+                if (!isFormValid) return
+
+                const dateFrom = this.dateFrom.toLocaleDateString().split('.').reverse().join('-')
+                const dateTo = this.dateTo.toLocaleDateString().split('.').reverse().join('-')
+                const workType = this.workTypeItems.find(item => item.active == true).type
+
+                this.$http
+                    .post('https://localhost:8000/project_apps/',
+                        {
+                            title: this.title,
+                            work_type: workType,
+                            deadline_from: dateFrom,
+                            deadline_to: dateTo,
+                            budget_from: this.budget_from,
+                            budget_to: this.budget_to,
+                            description: this.description,
+                            tasks: JSON.stringify(this.formattedTasks),
+                            status: 'SELECTION_PROCESS'
                         },
                         { headers: { "X-Csrftoken": this.$cookies.get('csrftoken') } }
                     )
