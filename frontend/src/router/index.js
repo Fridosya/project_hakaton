@@ -1,18 +1,22 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
-import store from '@/store'
+// import store from '@/store'
 
 //pages
 import HomePage from './routes/HomePage.vue'
 import LoginPage from './routes/LoginPage.vue'
 import RegisterPage from './routes/RegisterPage.vue'
 import AppsPage from './routes/AppsPage.vue'
+import SotrAccountPage from './routes/SotrAccountPage.vue'
+import OrgAccountPage from './routes/OrgAccountPage.vue'
 
 
 const routes = [
     { path: '/', component: HomePage, name: 'home' },
     { path: '/login', component: LoginPage, name: 'login' },
     { path: '/registration', component: RegisterPage, name: 'register' },
-    { path: '/applications', component: AppsPage, name: 'applications' }
+    { path: '/applications', component: AppsPage, name: 'applications' },
+    { path: '/account', component: SotrAccountPage, name: 'sotrAccount' },
+    { path: '/accountOrg', component: OrgAccountPage, name: 'orgAccount'}
 ]
 
 const router = createRouter({
@@ -20,19 +24,18 @@ const router = createRouter({
     routes,
 })
 
-router.beforeEach((to, from, next) => {
-    const authorized = store.getters.isAuthorized
+// router.beforeEach((to, from, next) => {
+//     const authorized = store.getters.isAuthorized
 
-    // if (authorized) {
-    //     store.dispatch('setUserAndAccount')
-    // }
+//     // if (authorized) {
+//     //     store.dispatch('setUserAndAccount')
+//     // }
 
-    if (!['login', 'register'].includes(to.name) && !authorized) {
-        next({ name: 'login' })
-    } else if (['login', 'register'].includes(to.name) && authorized) {
-        next({ name: from.name })
-    }
-    else next()
-})
+//     if (!['login', 'register'].includes(to.name) && !authorized) {
+//         next({ name: 'login' })
+//     } else if (['login', 'register'].includes(to.name) && authorized) {
+//         next({ name: from.name })
+//     } else next()
+// })
 
 export default router
