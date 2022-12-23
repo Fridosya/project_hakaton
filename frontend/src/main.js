@@ -6,6 +6,10 @@ import App from './App.vue'
 import store from '@/store'
 import router from '@/router'
 import 'bootstrap/dist/css/bootstrap.css'
+import axios from 'axios'
+
+import Datepicker from '@vuepic/vue-datepicker';
+import '@vuepic/vue-datepicker/dist/main.css'
 
 
 const app = createApp(App)
@@ -15,6 +19,12 @@ app.use(store)
 app.use(VueTheMask)
 app.use(VueCookies)
 app.use(Bootstrap)
+
+app.component('CDatepicker', Datepicker)
+
+app.config.globalProperties.$http = axios.create({
+    withCredentials: true
+})
 
 //инициализация стейта
 const sessionid = app.$cookies.get('sessionid')

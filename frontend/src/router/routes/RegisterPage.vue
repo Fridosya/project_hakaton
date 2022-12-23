@@ -121,8 +121,6 @@
     import CButton from '@/components/CButton.vue'
     import CCheckbox from '@/components/CCheckbox.vue'
 
-    import axios from 'axios'
-
     import { useVuelidate } from '@vuelidate/core'
     import { required, helpers, numeric, email, sameAs, minLength, maxLength } from '@vuelidate/validators'
     import { mask } from 'vue-the-mask'
@@ -193,14 +191,14 @@
                     formData['patronymic'] = this.patronymic
                 }
 
-                axios.
+                this.$http.
                     post('https://localhost:8000/contractors/', formData)
                     .then(() => {
-                        axios.
+                        this.$http.
                             post('https://localhost:8000/login/', {
                                 'email': this.email,
                                 'password': this.password
-                            }, { withCredentials: true })
+                            })
                             .then(res => {
                                 if (res.data.success) {
                                     // костыль: передаю и устанавливаю куки вручную, 
