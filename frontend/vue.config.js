@@ -3,15 +3,15 @@ const { defineConfig } = require('@vue/cli-service')
 
 
 module.exports = defineConfig({
-  transpileDependencies: true,
-  // devServer: {
-  //   open: process.platform === 'darwin',
-  //   host: '0.0.0.0',
-  //   port: 8080,
-  //   https: {
-  //     key: fs.readFileSync('../.certs/localhost.key'),
-  //     cert: fs.readFileSync('../.certs/localhost.crt')
-  //   },
-  //   hot: 'only'
-  // },
+    transpileDependencies: true,
+    // devServer: {
+    //     open: process.platform === 'darwin',
+    //     host: 'localhost',
+    //     port: 8080,
+    //     https: {
+    //         key: fs.readFileSync('../.certs/localhost.key'),
+    //         cert: fs.readFileSync('../.certs/localhost.crt')
+    //     },
+    //     hot: 'only'
+    // },
 })
