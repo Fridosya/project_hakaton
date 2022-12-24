@@ -151,9 +151,9 @@ export default {
          editing: false
       }
    },
-   // mounted() {
-   //    this.getUser();
-   // },
+   created() {
+      this.getUser();
+   },
    methods: {
       getUser() {
          this.editing = false;

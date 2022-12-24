@@ -16,39 +16,39 @@
                               <div class="col ">
                                  <div>
                                     <p class="mb-0 text-secondary">Фамилия</p>
-                                    <p></p>
+                                    <p>{{ user.last_name }}</p>
                                  </div>
                                  <div>
                                     <p class="mb-0 text-secondary">Телефон</p>
-                                    <p></p>
+                                    <p>{{ user.phone_number }}</p>
                                  </div>
                                  <div>
                                     <p class="mb-0 text-secondary">Должность</p>
-                                    <p></p>
+                                    <p>{{ user.position }}</p>
                                  </div>
                               </div>
                               <div class="col">
                                  <div>
                                     <p class="mb-0 text-secondary">Имя</p>
-                                    <p></p>
+                                    <p>{{ user.first_name }}</p>
                                  </div>
                                  <div>
                                     <p class="mb-0 text-secondary">ИНН</p>
-                                    <p></p>
+                                    <p>{{ user.TIN }}</p>
                                  </div>
                                  <div>
                                     <p class="mb-0 text-secondary">E-mail</p>
-                                    <p></p>
+                                    <p>{{ user.email }}</p>
                                  </div>
                               </div>
                               <div class="col">
                                  <div>
                                     <p class="mb-0 text-secondary">Отчество</p>
-                                    <p></p>
+                                    <p>{{ user.patronymic }}</p>
                                  </div>
                                  <div>
                                     <p class="mb-0 text-secondary">Краткое название</p>
-                                    <p></p>
+                                    <p>{{ user.short_title }}</p>
                                  </div>
                               </div>
                            </div>
@@ -60,8 +60,8 @@
                      </div>
                      <div class="ps-5 mt-4 row form-employee">
                         <div class="py-3">
-                           <button @click="editUser()" type="button" id="button-copmleted"
-                              class=" button-width btn ">Редактировать</button>
+                           <button @click="$router.push({ name: 'orgEdit', params: { id: id } })" type="button"
+                              id="button-copmleted" class=" button-width btn ">Редактировать</button>
                         </div>
                      </div>
                   </div>
@@ -145,7 +145,6 @@
 
 <script>
 import AsideMenu from '@/components/AsideMenu.vue';
-import axios from 'axios';
 
 export default {
    components: {
@@ -153,17 +152,22 @@ export default {
    },
    data() {
       return {
-         // user: {
-         //    email: '',
-         //    first_name: '',
-         //    last_name: '',
-         //    patronymic: '',
-         //    TIN: 0,
-         //    short_title: '',
-         //    position: '',
-         //    phone_number: ''
-         // },
+         user: {
+            email: '',
+            first_name: '',
+            last_name: '',
+            patronymic: '',
+            TIN: 0,
+            short_title: '',
+            position: '',
+            phone_number: ''
+         },
          editing: false
+      }
+   },
+   created() {
+      if (this.editing) {
+         this.fetchUserToEdit(this.$route.params.id)
       }
    },
    methods: {
@@ -178,9 +182,35 @@ export default {
          this.editing = false;
       },
       updateUser() {
-         axios
-            .patch('https://localhost:8000/contractors/' + this.user.id, this.user)
-      }
+         this.$http
+            .post('https://localhost:8000/contractors/${this.user.id}/',
+               {
+                  email: this.user.email,
+                  first_name: this.user.first_name,
+                  last_name: this.user.last_name,
+                  TIN: this.user.TIN,
+                  short_title: this.user.short_title,
+                  position: this.user.position,
+                  phone_number: this.user.phone_number
+               },
+               { headers: { "X-Csrftoken": this.$cookies.get('csrftoken') } }
+            )
+            .then(res => console.log(res))
+      },
+      fetchUserToEdit(id) {
+         this.$http
+            .get(`https://localhost:8000/contractors/${id}/`)
+            .then(res => {
+               this.user.email = res.data.email;
+               this.user.first_name = res.data.first_name;
+               this.user.last_name = res.data.last_name;
+               this.user.patronymic = res.data.patronymic;
+               this.user.TIN = res.data.TIN;
+               this.user.position = res.data.position;
+               this.user.phone_number = res.data.phone_number;
+               this.user.short_title = res.data.short_title;
+            })
+      },
    },
 }
 </script>

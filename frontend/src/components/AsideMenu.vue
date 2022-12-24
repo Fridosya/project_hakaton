@@ -129,7 +129,7 @@ export default {
             },
                 this.menuLinks[3] = {
                     text: 'Профиль организации',
-                    to: 'applications',
+                    to: 'orgAccount',
                     imageSrc: 'img/profile-link.svg',
                     childLinks: []
                 }
