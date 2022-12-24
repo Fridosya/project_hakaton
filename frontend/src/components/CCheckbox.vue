@@ -7,7 +7,9 @@
         <input type="checkbox" :id="'checkbox-' + id" class="checkbox__input" :checked="modelValue"
             @change="$emit('update:modelValue', $event.target.checked)">
         <label :for="'checkbox-' + id" class="checkbox__label">
-            <span><slot></slot></span>
+            <span>
+                <slot></slot>
+            </span>
         </label>
     </div>
 </template>
@@ -41,7 +43,7 @@
         cursor: pointer;
     }
 
-    .checkbox__label > span {
+    .checkbox__label>span {
         margin-left: 8px;
         padding-top: 2px;
     }
@@ -67,10 +69,10 @@
         transform: rotate(-50deg);
         position: absolute;
         left: 11px;
-        bottom: 9px;
+        margin-bottom: 4px;
     }
 
-    .checkbox__input:checked + .checkbox__label::after {
+    .checkbox__input:checked+.checkbox__label::after {
         display: block;
     }
 </style>
