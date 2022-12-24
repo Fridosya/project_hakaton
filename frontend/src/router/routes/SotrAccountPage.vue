@@ -16,21 +16,21 @@
                               <div class="col">
                                  <div>
                                     <p class="mb-0 text-secondary">Отдел</p>
-                                    <p>По работе с рисками</p>
+                                    <p>Аналитика</p>
                                  </div>
                                  <div>
                                     <p class="mb-0 text-secondary">Телефон</p>
-                                    <p>+7 (922) 111-11-11</p>
+                                    <p>{{ user.phone_number }}</p>
                                  </div>
                               </div>
                               <div class="col">
                                  <div>
                                     <p class="mb-0 text-secondary">Должность</p>
-                                    <p>Аналитик</p>
+                                    <p>{{ user.position }}</p>
                                  </div>
                                  <div>
                                     <p class="mb-0 text-secondary">E-mail</p>
-                                    <p>ivanivanov@mail.ru</p>
+                                    <p>{{ user.email }}</p>
                                  </div>
                               </div>
                            </div>
@@ -163,7 +163,7 @@ export default {
          console.log(this.user);
          axios.
             patch(
-               'https://localhost:8000/customer/', this.user)
+               'https://localhost:8000/customer/' + this.user.id, this.user, { headers: { "X-Csrftoken": this.$cookies.get('csrftoken') } })
             .then(() =>
                this.getUser())
             .catch(exception => {

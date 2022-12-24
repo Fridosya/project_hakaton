@@ -145,6 +145,7 @@
 
 <script>
 import AsideMenu from '@/components/AsideMenu.vue';
+import axios from 'axios';
 
 export default {
    components: {
@@ -166,9 +167,7 @@ export default {
       }
    },
    created() {
-      if (this.editing) {
-         this.fetchUserToEdit(this.$route.params.id)
-      }
+      this.getUser()
    },
    methods: {
       getUser() {
@@ -182,35 +181,35 @@ export default {
          this.editing = false;
       },
       updateUser() {
-         this.$http
-            .post('https://localhost:8000/contractors/${this.user.id}/',
-               {
-                  email: this.user.email,
-                  first_name: this.user.first_name,
-                  last_name: this.user.last_name,
-                  TIN: this.user.TIN,
-                  short_title: this.user.short_title,
-                  position: this.user.position,
-                  phone_number: this.user.phone_number
-               },
+         axios
+            .patch('https://localhost:8000/contractors/' + this.user.id, this.user,
+               // {
+               //    email: this.user.email,
+               //    first_name: this.user.first_name,
+               //    last_name: this.user.last_name,
+               //    TIN: this.user.TIN,
+               //    short_title: this.user.short_title,
+               //    position: this.user.position,
+               //    phone_number: this.user.phone_number
+               // },
                { headers: { "X-Csrftoken": this.$cookies.get('csrftoken') } }
             )
             .then(res => console.log(res))
       },
-      fetchUserToEdit(id) {
-         this.$http
-            .get(`https://localhost:8000/contractors/${id}/`)
-            .then(res => {
-               this.user.email = res.data.email;
-               this.user.first_name = res.data.first_name;
-               this.user.last_name = res.data.last_name;
-               this.user.patronymic = res.data.patronymic;
-               this.user.TIN = res.data.TIN;
-               this.user.position = res.data.position;
-               this.user.phone_number = res.data.phone_number;
-               this.user.short_title = res.data.short_title;
-            })
-      },
+      // fetchUserToEdit(id) {
+      //    this.$http
+      //       .get(`https://localhost:8000/contractors/${id}/`)
+      //       .then(res => {
+      //          this.user.email = res.data.email;
+      //          this.user.first_name = res.data.first_name;
+      //          this.user.last_name = res.data.last_name;
+      //          this.user.patronymic = res.data.patronymic;
+      //          this.user.TIN = res.data.TIN;
+      //          this.user.position = res.data.position;
+      //          this.user.phone_number = res.data.phone_number;
+      //          this.user.short_title = res.data.short_title;
+      //       })
+      // },
    },
 }
 </script>
