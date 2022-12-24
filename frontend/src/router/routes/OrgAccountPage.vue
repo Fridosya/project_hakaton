@@ -60,8 +60,8 @@
                      </div>
                      <div class="ps-5 mt-4 row form-employee">
                         <div class="py-3">
-                           <button @click="$router.push({ name: 'orgEdit', params: { id: id } })" type="button"
-                              id="button-copmleted" class=" button-width btn ">Редактировать</button>
+                           <button @click="editUser()" type="button" id="button-copmleted"
+                              class=" button-width btn ">Редактировать</button>
                         </div>
                      </div>
                   </div>

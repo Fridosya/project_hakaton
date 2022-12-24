@@ -163,7 +163,7 @@ export default {
          console.log(this.user);
          axios.
             patch(
-               'https://localhost:8000/customer/' + this.user.id, this.user, { headers: { "X-Csrftoken": this.$cookies.get('csrftoken') } })
+               'https://localhost:8000/customers/' + this.user.id, this.user, { headers: { "X-Csrftoken": this.$cookies.get('csrftoken') } })
             .then(() =>
                this.getUser())
             .catch(exception => {
